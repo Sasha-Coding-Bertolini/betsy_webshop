@@ -8,7 +8,7 @@ class Product(peewee.Model):
     name = peewee.CharField(index=True)
     description = peewee.CharField(index=True)
     price_per_unit_cents = peewee.IntegerField()
-    total_quantity = peewee.IntegerField()
+    quantity = peewee.IntegerField()
 
     class Meta:
         database = db
@@ -35,7 +35,7 @@ class Tag(peewee.Model):
 class Transaction(peewee.Model):
     purchased_by_user = peewee.ForeignKeyField(User)
     purchased_product = peewee.ForeignKeyField(Product)
-    quantity_purchased_items = peewee.IntegerField()
+    quantity = peewee.IntegerField()
 
     class Meta:
         database = db

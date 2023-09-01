@@ -24,6 +24,7 @@ def populate_test_database():
             models.Tag,
             models.TagProducts,
             models.UserProducts,
+            models.Transaction,
         ]
     )
 
@@ -87,15 +88,24 @@ def populate_test_database():
             address=user[1],
             billing_info=user[2],
         )
+
         for product_data in products:
             # Create a new product
             product = models.Product.create(
                 name=product_data[0],
                 description=product_data[1],
                 price_per_unit_cents=product_data[2],
-                total_quantity=product_data[3],
+                quantity=product_data[3],
             )
             user.products.add(product)
+
+            # Create a transaction for each product
+            models.Transaction.create(
+                purchased_by_user=user,
+                purchased_product=product,
+                quantity=product_data[3],
+            )
+
             # Check if a tag with the same name already exists
             tag_name = product_data[4].lower()
             existing_tag = models.Tag.get_or_none(fn.LOWER(models.Tag.name) == tag_name)
